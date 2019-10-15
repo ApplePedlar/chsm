@@ -13,14 +13,13 @@
       button(@click="transformAbc") reRender
       button(onclick="window.print()") print
     #abc(ref="abcObj")
-    #abc2(ref="abcObj2")
 </template>
 
 <script>
 import abcjs from "abcjs";
 import AbcHarmonicaScoreMaker from "./utils/AbcHarmonicaScoreMaker.js"
 
-const defaultAbcText = 
+const defaultAbcText =
 `
 T:All pitches
 M:C
@@ -36,11 +35,13 @@ export default {
   data() {
     return {
       defaultAbcText: defaultAbcText,
-      offsetPitch: 0
+      offsetPitch: 0,
+      scoreMaker: null,
     }
   },
 
   mounted() {
+    this.abcHarmonicaScoreMaker = new AbcHarmonicaScoreMaker()
     this.transformAbc()
   },
 
@@ -48,18 +49,18 @@ export default {
     transformAbc() {
       let configure = {
         responsive: "resize",
+        afterParsing: this.addHarmonicaTab,
         format: {
             annotationfont: "Times New Roman",
         }
       }
-      let tune = abcjs.renderAbc("abc", this.$refs.abcInput.value, configure)[0]
-      let abcHarmonicaScoreMaker = new AbcHarmonicaScoreMaker()
-      abcHarmonicaScoreMaker.transform(tune, Number(this.offsetPitch))
-      abcjs.renderEachLineSeparately(this.$refs.abcObj2, tune, configure, 0)
-      abcHarmonicaScoreMaker.addUnderline(this.$refs.abcObj2)
+      abcjs.renderAbc("abc", this.$refs.abcInput.value, configure)[0]
+      this.abcHarmonicaScoreMaker.addUnderline(this.$refs.abcObj)
     },
-
-  } 
+    addHarmonicaTab(tuneObj) {
+      this.abcHarmonicaScoreMaker.transform(tuneObj, Number(this.offsetPitch))
+    },
+  },
 }
 </script>
 
@@ -75,10 +76,6 @@ button, input
   margin-right: 10px
 
 #abc
-  width: 800px
-  display: none !important
-
-#abc2
   width: 800px
 
 @media print
