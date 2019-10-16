@@ -21,21 +21,22 @@ import AbcHarmonicaScoreMaker from "./utils/AbcHarmonicaScoreMaker.js"
 
 const defaultAbcText =
 `
-T:All pitches
-M:C
+T:Greensleeves
+M:6/8
 L:1/8
-K:C
-C,^C,D,^D, E,F,^F,G,|^G,A,^A,B, C^CD^D|
-EF^FG ^GA^AB|c^cd^d ef^fg|
-^ga^ab c'^c'd'^d'|e'f'^f'g' ^g'a'^a'b'|
-c''^c''z6|]
+K:G
+A | c2 d e>fe | d2 B G>AB | c2 A A>^GA |
+B2 ^G E2 A | c2 d e>fe | d2 B G>AB |
+c>BA ^G>FG | A3 A3 || g3 g>fe | d2 B G>AB |
+c2 A A>^GA | B2 ^G E3 | g3 g>fe | d2 B G>AB |
+c>BA ^G>FG | A3 A2 |]
 `
 
 export default {
   data() {
     return {
       defaultAbcText: defaultAbcText,
-      offsetPitch: 0,
+      offsetPitch: -12,
       scoreMaker: null,
     }
   },
@@ -52,7 +53,8 @@ export default {
         afterParsing: this.addHarmonicaTab,
         format: {
             annotationfont: "Times New Roman",
-        }
+        },
+        oneSvgPerLine: true
       }
       abcjs.renderAbc("abc", this.$refs.abcInput.value, configure)[0]
       this.abcHarmonicaScoreMaker.addUnderline(this.$refs.abcObj)
@@ -76,12 +78,12 @@ button, input
   margin-right: 10px
 
 #abc
-  width: 800px
+  max-width: 800px
 
 @media print
   h1, .form
     display: none
-  #abc2
+  #abc
     top: 0
     left: 0
     width: 172mm
