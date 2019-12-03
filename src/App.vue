@@ -86,6 +86,8 @@ button, input
   #abc
     top: 0
     left: 0
-    width: 172mm
+    width: 100%
     height: 251mm
+  @page
+    margin: 0 5% 3%
 </style>
