@@ -70,15 +70,22 @@ export default class AbcHarmonicaScoreMaker {
           }
           
           let pitch = voice.pitches[0].pitch
+          let pitchCode = (pitch + 70) % 7
           let accidental = voice.pitches[0].accidental
           if (accidental) {
             let diff = 0
             if (accidental === "sharp") {
               diff = 0.5
+              if (pitchCode === 2 || pitchCode === 6) {
+                diff = 1
+              }
             } else if (accidental === "dblsharp") {
               diff = 1
             } else if (accidental === "flat") {
               diff = -0.5
+              if (pitchCode === 0 || pitchCode === 3) {
+                diff = -1
+              }
             } else if (accidental === "dblflat") {
               diff = 1
             } else if (accidental === "natural") {
@@ -88,8 +95,8 @@ export default class AbcHarmonicaScoreMaker {
             pitch += diff
           } else if (accidentialTempMap.hasOwnProperty(pitch)) {
             pitch += accidentialTempMap[pitch]
-          } else if (!!accidentalByKeyMap[(pitch + 70) % 7]) {
-            pitch += accidentalByKeyMap[(pitch + 70) % 7]
+          } else if (!!accidentalByKeyMap[pitchCode]) {
+            pitch += accidentalByKeyMap[pitchCode]
           }
 
           let number = ""
@@ -127,13 +134,20 @@ export default class AbcHarmonicaScoreMaker {
     let accidentals = line.staff[0].key.accidentals
     let accidentalByKeyMap = {}
     accidentals.forEach((a) => {
+      let pitchCode = a.verticalPos % 7
       let shift = 0
-      if (a.acc === "flat") {
-        shift = -0.5
-      } else if (a.acc === "sharp") {
+      if (a.acc === "sharp") {
         shift = 0.5
+        if (pitchCode === 2 || pitchCode === 6) {
+          shift = 1
+        }
+      } else if (a.acc === "flat") {
+        shift = -0.5
+        if (pitchCode === 0 || pitchCode === 3) {
+          shift = -1
+        }
       }
-      accidentalByKeyMap[a.verticalPos % 7] = shift
+      accidentalByKeyMap[pitchCode] = shift
     })
     return accidentalByKeyMap
   }
