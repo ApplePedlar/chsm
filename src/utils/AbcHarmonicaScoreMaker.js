@@ -182,7 +182,13 @@ export default class AbcHarmonicaScoreMaker {
     }
     for (let i = 0; i < elem.getElementsByTagName("text").length; i++) {
       let textObj = elem.getElementsByTagName("text")[i]
-      let text = textObj.getElementsByTagName("tspan")[0].innerHTML
+      let tspanObj = textObj.getElementsByTagName("tspan")[0]
+      let text = tspanObj.innerHTML
+
+      // adjust x
+      textObj.setAttribute("x", textObj.getAttribute("x") - 3)
+      tspanObj.setAttribute("x", tspanObj.getAttribute("x") - 3)
+
       if (map[text]) {
         text = map[text]
         textObj.innerHTML = text
@@ -190,8 +196,8 @@ export default class AbcHarmonicaScoreMaker {
         var line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
         line.setAttribute("x1", textObj.getAttribute("x"))
         line.setAttribute("x2", String(Number(textObj.getAttribute("x")) + 16))
-        line.setAttribute("y1", String(Number(textObj.getAttribute("y")) + 12))
-        line.setAttribute("y2", String(Number(textObj.getAttribute("y")) + 12))
+        line.setAttribute("y1", String(Number(textObj.getAttribute("y")) + 4))
+        line.setAttribute("y2", String(Number(textObj.getAttribute("y")) + 4))
         line.setAttribute("stroke", "black")
         line.setAttribute("stroke-width", "2")
         textObj.parentNode.insertBefore(line, textObj.nextSibling)
