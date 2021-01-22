@@ -10,6 +10,7 @@
   "dependencies": {
     "abcjs": "6.0.0-beta.21",
     "core-js": "^2.6.5",
+    "font-awesome": "^4.7.0",
     "vue": "^2.6.12"
   },
   "devDependencies": {
